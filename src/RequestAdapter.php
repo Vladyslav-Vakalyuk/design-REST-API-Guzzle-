@@ -12,26 +12,46 @@ class RequestAdapter {
 	private $logging;
 	private $cacheManager;
 
+	/**
+	 * @param $cacheManager
+	 */
 	public function setCacheManager( $cacheManager ) {
 		$this->cacheManager = $cacheManager;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getCacheManager() {
 		return $this->cacheManager;
 	}
 
+	/**
+	 * @param $logging
+	 */
 	public function setLogging( $logging ) {
 		$this->logging = $logging;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getLogging() {
 		return $this->logging;
 	}
 
+	/**
+	 * @param $manager
+	 */
 	public function setClientManager( $manager ) {
 		$this->clientManager = $manager;
 	}
 
+	/**
+	 * @param $param
+	 *
+	 * @return string
+	 */
 	public function getQueryParam( $param ) {
 		$prepareParam = [];
 		foreach ( $param as $key => $value ) {
@@ -43,14 +63,26 @@ class RequestAdapter {
 		);
 	}
 
+	/**
+	 * @param $q
+	 */
 	public function setSearchParam( $q ) {
 		$this->q = $q;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getSearchParam() {
 		return $this->q;
 	}
 
+	/**
+	 * @param $url
+	 * @param $param
+	 *
+	 * @return array|mixed
+	 */
 	public function request( $url, $param ) {
 		$cacheManager = $this->getCacheManager();
 		$requestUrl   = $this->baseUrl . $url;
@@ -61,10 +93,8 @@ class RequestAdapter {
 		} else {
 			$resultRequest = $this->clientManager->request( 'GET', $endpoint, [ 'headers' => $this->getHeders() ] );
 			if ( $resultRequest->getStatusCode() === 200 ) {
-//				var_dump();die;
 				$response = $resultRequest->getBody()->getContents();
 				$resultRequest->getHeader('pagination-count')[0];
-//				var_dump($response);die;
 				$result = [];
 				$result['content'] = \json_decode($response,true);
 				if(isset($resultRequest->getHeader('pagination-count')[0])){

@@ -6,6 +6,9 @@ class Collection {
 
 	public static $request_manager;
 
+	/**
+	 *
+	 */
 	public static function init() {
 		if ( empty( static::$request_manager ) ) {
 
