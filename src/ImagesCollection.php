@@ -4,11 +4,22 @@ class ImagesCollection extends Collection {
 	protected $id;
 	protected $url;
 
+	/**
+	 * ImagesCollection constructor.
+	 *
+	 * @param $id
+	 * @param $url
+	 */
 	public function __construct( $id, $url ) {
 		$this->setId( $id );
 		$this->setUrl( $url );
 	}
 
+	/**
+	 * @param $breedId
+	 *
+	 * @return array
+	 */
 	public static function searchByBreeds( $breedId ) {
 		static::init();
 		$arrayResponse    =  static::$request_manager->request( 'images/search', [ 'breed-id' => $breedId ] );
@@ -20,6 +31,11 @@ class ImagesCollection extends Collection {
 		return $imagesCollection;
 	}
 
+	/**
+	 * @param $categoryId
+	 *
+	 * @return array[]
+	 */
 	public static function searchByCategory( $categoryId ) {
 		static::init();
 		$arrayResponse      =  static::$request_manager->request( 'images/search', [ 'category_ids' => $categoryId ] );
@@ -36,18 +52,30 @@ class ImagesCollection extends Collection {
 		return $result;
 	}
 
+	/**
+	 * @param $id
+	 */
 	public function setId( $id ) {
 		$this->id = $id;
 	}
 
+	/**
+	 * @param $url
+	 */
 	public function setUrl( $url ) {
 		$this->url = $url;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getId() {
 		return $this->id;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getUrl() {
 		return $this->url;
 	}
