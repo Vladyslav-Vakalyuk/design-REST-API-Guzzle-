@@ -1,0 +1,21 @@
+{
+  "name": "vendor_name/designrestapiguzzle",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Vladyslav_Vakaliuk",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "7.0",
+    "cache/cache": "^1.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  }
+}
