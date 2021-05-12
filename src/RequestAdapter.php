@@ -89,23 +89,32 @@ class RequestAdapter {
 		$queryParam   = $this->getQueryParam( $param );
 		$endpoint     = $requestUrl . '?' . $queryParam;
 		if ( $cacheManager->getValue( $endpoint ) ) {
-			$result = $cacheManager->getValue( $endpoint );
-		} else {
-			$resultRequest = $this->clientManager->request( 'GET', $endpoint, [ 'headers' => $this->getHeders() ] );
-			if ( $resultRequest->getStatusCode() === 200 ) {
-				$response = $resultRequest->getBody()->getContents();
-				$resultRequest->getHeader('pagination-count')[0];
-				$result = [];
-				$result['content'] = \json_decode($response,true);
-				if(isset($resultRequest->getHeader('pagination-count')[0])){
-					$result['headers']['page-count'] = $resultRequest->getHeader('pagination-count')[0];
-				}
-				$cacheManager->setValue( $endpoint, $result );
-				$this->getLogging()->logging( $requestUrl . '?' . $queryParam, $result );
-
-				return $result;
-			}
+			return $cacheManager->getValue( $endpoint );
 		}
+		$resultRequest = $this->clientManager->request( 'GET', $endpoint, [ 'headers' => $this->getHeders() ] );
+		if ( $resultRequest->getStatusCode() === 200 ) {
+			return $this->handle_request_result( $resultRequest, $cacheManager, $endpoint, $requestUrl, $queryParam );
+		}
+	}
+
+	/**
+	 * @param $resultRequest
+	 * @param $cacheManager
+	 * @param $endpoint
+	 * @param $requestUrl
+	 * @param $queryParam
+	 *
+	 * @return array
+	 */
+	public function handle_request_result( $resultRequest, $cacheManager, $endpoint, $requestUrl, $queryParam ) {
+		$response = $resultRequest->getBody()->getContents();
+		$resultRequest->getHeader( 'pagination-count' )[0];
+		$result            = [];
+		$result['content'] = \json_decode( $response, true );
+		if ( isset( $resultRequest->getHeader( 'pagination-count' )[0] ) ) {
+			$result['headers']['page-count'] = $resultRequest->getHeader( 'pagination-count' )[0];
+		}
+		$cacheManager->setValue( $endpoint, $result );
 		$this->getLogging()->logging( $requestUrl . '?' . $queryParam, $result );
 
 		return $result;
